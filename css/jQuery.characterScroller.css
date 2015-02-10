@@ -1,0 +1,6 @@
+#character-scroller {
+  position: fixed;
+  background: #000;
+  right: 10px;
+  bottom: 10px;
+}
