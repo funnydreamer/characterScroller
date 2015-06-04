@@ -11,27 +11,27 @@
 
 (function($){
 
-  var w, h, frame, frames, cat, fps, animator, interval, $scroller;
+  var w, h, frame, frames, row, fps, animator, interval, $scroller;
   
   var methods = {
     
     init: function( config ){
 
       var defaults = {
-        width:50,
-        height:50,
-        animate:true,
-        easing:'fast',
-        img:'./images/matrix.jpg',
+        width:50, // width of 1frame
+        height:50, // height of 1frame
+        animate:true, // no used!
+        easing:'fast', // easing
+        img:'./images/matrix.jpg', // sprite image for animation
         frames:[
           [1,2,3,4,5],
           [1,2,3,4,5],
           [1,2,3,4,5],
           [1,2,3,4,5],
           [1,2,3,4,5]
-        ],
-        fps:1,
-        cat:0
+        ], 
+        fps:1, // frame per second
+        row:0 // indicate initial image in frames 
       };
 
       var options=$.extend(defaults, config);
@@ -52,7 +52,7 @@
       h = options.height;
       frame = 0;
       frames = options.frames;
-      cat = options.cat;
+      row = options.row;
       fps = options.fps;
       interval = 1000/fps;
 
@@ -74,25 +74,37 @@
       clearInterval( animator );
     },
 
+    reset : function() { // function for reset frame to 0 and stop
+      frame = 0;
+      methods.update();
+      methods.stop();
+    },
+
+    fps : function( value ) { // set fps value
+      interval = 1000/value;
+      methods.stop();
+      methods.start();
+    },
+
     change : function( index ){
       if( index >= frames.length || index < 0 ) {
         $.error( 'index: ' + index + ' is out of frames length. "frames" range is [0-' + (frames.length-1) + ']' );
         return ;
       }
       frame = 0;
-      cat = index;
+      row = index;
       methods.update();
     },
 
     processing : function(){
       frame++;
-      if( frame >= frames[cat].length ) frame = 0;
+      if( frame >= frames[row].length ) frame = 0;
       methods.update();
     },
 
     update : function(){
       $scroller.css({
-        'background-position': ( (frames[cat][frame]-1) * -w ) + 'px ' + ( cat * -h ) + 'px'
+        'background-position': ( (frames[row][frame]-1) * -w ) + 'px ' + ( row * -h ) + 'px'
       });
     }
 

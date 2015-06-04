@@ -23,8 +23,27 @@
 
 #nav ul li {
 	float: left;
-	margin-right: 10px;
+	margin-right: 30px;
 	cursor: pointer;
+	color:#333;
+	font-size:12px;
+}
+
+#nav ul li a {
+	color:#333;
+	border:1px solid #333;
+	border-radius:3px;
+	padding:5px 16px;
+	font-size:12px;
+	text-decoration: none;
+	outline:none;
+	transition: all 1s ease;
+	-webkit-transition: all .3s ease;
+	-moz-transition: all .3s ease;
+}
+#nav ul li a:hover {
+	color:#fff;
+	border:1px solid #fff;
 }
 
 .section {
@@ -32,10 +51,10 @@
 }
 
 #section-1 { background:#a0a0a0; }
-#section-2 { background:#a2a2a2; }
-#section-3 { background:#a4a4a4; }
-#section-4 { background:#a8a8a8; }
-#section-5 { background:#aaaaaa; }
+#section-2 { background:#a9a9a9; }
+#section-3 { background:#b2b2b2; }
+#section-4 { background:#bbbbbb; }
+#section-5 { background:#c4c4c4; }
 
 </style>
 
@@ -49,35 +68,44 @@ $(function(){
 
 	$lists = $('#nav').find('li');
 
+	$console = $('#console');
+
 	$lists.each( function() {
 
 		var id = $(this).attr('id');
 
 		if( id == 'btn-start' )
 		{
-			$(this).on('click', function(){
+			$(this).find('a').on('click', function(){
+				event.preventDefault();
 				$('body').characterScroller( 'start' );
+				$console.text( $(this).text() );
 			});
 		}
 		else if( id == 'btn-stop' ) {
-			$(this).on('click', function(){
+			$(this).find('a').on('click', function(){
+				event.preventDefault();
 				$('body').characterScroller( 'stop' );
+				$console.text( $(this).text() );
 			});
 		}
-		else if( id == 'btn-1' ) {
-			$(this).on('click', function(){
-				$('body').characterScroller( 'change', 0 );
-			});
+		else if( id == 'btn-reset' ) {
+			$(this).find('a').on('click', function(){
+				event.preventDefault();
+				$('body').characterScroller( 'reset' );
+			})
 		}
-		else if( id == 'btn-2' ) {
-			$(this).on('click', function(){
-				$('body').characterScroller( 'change', 1 );
-			});
+		else if( id == 'change' ) {
+			$(this).find('select').on('change', function(){
+				var idx = $(this).val() - 1;
+				$('body').characterScroller( 'change', idx );
+			})
 		}
-		else if( id == 'btn-5' ) {
-			$(this).on('click', function(){
-				$('body').characterScroller( 'change', 5 );
-			});
+		else if( id == 'fps' ) {
+			$(this).find('select').on('change', function(){
+				var fps = $(this).val();
+				$('body').characterScroller( 'fps', fps );
+			})
 		}
 
 	});
@@ -89,11 +117,32 @@ $(function(){
 
 <div id="nav">
 	<ul>
-		<li id="btn-start">START</li>
-		<li id="btn-stop">STOP</li>
-		<li id="btn-1">CHANGE1</li>
-		<li id="btn-2">CHANGE2</li>
-		<li id="btn-5">CHANGE5</li>
+		<li id="btn-start"><a href="#">PLAY</a></li>
+		<li id="btn-stop"><a href="#">STOP</a></li>
+		<li id="btn-reset"><a href="#">RESET</a></li>
+		<li id="change">
+			<form>
+			row : 
+			<select name="コマ">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			</select>
+			</form>
+		</li>
+		<li id="fps">
+			<form>
+			fps : 
+			<select name="fps">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="5">5</option>
+			</select>
+			</form>
+		</li>
+		<li>ANIMATION STATUS : <span id="console">STOP</span></li>
 	</ul>
 </div>
 
